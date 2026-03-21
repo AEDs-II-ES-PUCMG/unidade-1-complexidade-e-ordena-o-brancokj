@@ -2,20 +2,20 @@ import java.util.Arrays;
 
 public class BubbleSort<T extends Comparable<T>> implements IOrdenador<T>{
 
-    private int comparacoes;
-    private int movimentacoes;
-    private double tempoOrdenacao;
-    private double inicio;
+    private long comparacoes = 0;
+    private long movimentacoes = 0;
+    private double tempoOrdenacao = 0;
+    private double inicio = 0;
 
     private double nanoToMilli = 1.0/1_000_000;
 
     @Override
-    public int getComparacoes() {
+    public long getComparacoes() {
         return comparacoes;
     }
 
     @Override
-    public int getMovimentacoes() {
+    public long getMovimentacoes() {
         return movimentacoes;
     }
 

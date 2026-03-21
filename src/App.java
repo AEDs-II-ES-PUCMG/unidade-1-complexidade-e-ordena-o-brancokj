@@ -2,31 +2,35 @@ import java.util.Arrays;
 import java.util.Random;
 
 public class App {
-    static final int[] tamanhosTesteGrande =  { 31_250_000, 62_500_000, 125_000_000, 250_000_000, 500_000_000 };
-    static final int[] tamanhosTesteMedio =   {     12_500,     25_000,      50_000,     100_000,     200_000 };
-    static final int[] tamanhosTestePequeno = {          3,          6,          12,          24,          48 };
+    static final int[] tamanhosTesteGrande = { 31_250_000, 62_500_000, 125_000_000, 250_000_000, 500_000_000 };
+    static final int[] tamanhosTesteMedio = { 12_500, 25_000, 50_000, 100_000, 200_000 };
+    static final int[] tamanhosTestePequeno = { 3, 6, 12, 24, 48 };
     static Random aleatorio = new Random();
     static long operacoes;
-    static double nanoToMilli = 1.0/1_000_000;
-    
+    static double nanoToMilli = 1.0 / 1_000_000;
 
     /**
-     * Gerador de vetores aleatórios de tamanho pré-definido. 
+     * Gerador de vetores aleatórios de tamanho pré-definido.
+     * 
      * @param tamanho Tamanho do vetor a ser criado.
-     * @return Vetor com dados aleatórios, com valores entre 1 e (tamanho/2), desordenado.
+     * @return Vetor com dados aleatórios, com valores entre 1 e (tamanho/2),
+     *         desordenado.
      */
-    static int[] gerarVetor(int tamanho){
+    static int[] gerarVetor(int tamanho) {
         int[] vetor = new int[tamanho];
         for (int i = 0; i < tamanho; i++) {
-            vetor[i] = aleatorio.nextInt(1, tamanho/2);
+            vetor[i] = aleatorio.nextInt(1, tamanho / 2);
         }
-        return vetor;        
+        return vetor;
     }
 
     /**
-     * Gerador de vetores de objetos do tipo Integer aleatórios de tamanho pré-definido. 
+     * Gerador de vetores de objetos do tipo Integer aleatórios de tamanho
+     * pré-definido.
+     * 
      * @param tamanho Tamanho do vetor a ser criado.
-     * @return Vetor de Objetos Integer com dados aleatórios, com valores entre 1 e (tamanho/2), desordenado.
+     * @return Vetor de Objetos Integer com dados aleatórios, com valores entre 1 e
+     *         (tamanho/2), desordenado.
      */
     static Integer[] gerarVetorObjetos(int tamanho) {
         Integer[] vetor = new Integer[tamanho];
@@ -36,23 +40,56 @@ public class App {
         return vetor;
     }
 
+    static void geradorBolha() {
+        for (int i = 0; i < tamanhosTesteMedio.length; i++) {
+            Integer[] vetor = gerarVetorObjetos(tamanhosTesteMedio[i]);
+            BubbleSort<Integer> bolha = new BubbleSort<>();
+
+            Integer[] vetorOrdenadoBolha = bolha.ordenar(vetor);
+
+            System.out.println("\nVetor ordenado método Bolha:");
+            System.out.println("Comparações: " + bolha.getComparacoes());
+            System.out.println("Movimentações: " + bolha.getMovimentacoes());
+            System.out.println("Tempo de ordenação (ms): " + bolha.getTempoOrdenacao());
+        }
+    }
+
+    static void geradorInsertion() {
+        for (int i = 0; i < tamanhosTesteMedio.length; i++) {
+            Integer[] vetor = gerarVetorObjetos(tamanhosTesteMedio[i]);
+            InsertionSort<Integer> insertion = new InsertionSort<>();
+
+            Integer[] vetorOrdenadoInsertion = insertion.ordenar(vetor);
+
+            System.out.println("\nVetor ordenado método Insertion:");
+            System.out.println("Comparações: " + insertion.getComparacoes());
+            System.out.println("Movimentações: " + insertion.getMovimentacoes());
+            System.out.println("Tempo de ordenação (ms): " + insertion.getTempoOrdenacao());
+            System.out.printf("\n\n");
+        }
+    }
+
+    static void geradorSelection(){
+        for (int i = 0; i < tamanhosTesteMedio.length; i++) {
+            Integer[] vetor = gerarVetorObjetos(tamanhosTesteMedio[i]);
+            SelectionSort<Integer> Selection = new SelectionSort<>();
+
+            Integer[] vetorOrdenadoSelection = Selection.ordenar(vetor);
+
+            System.out.println("\nVetor ordenado método SelectionSort:");
+            System.out.println("Comparações: " + Selection.getComparacoes());
+            System.out.println("Movimentações: " + Selection.getMovimentacoes());
+            System.out.println("Tempo de ordenação (ms): " + Selection.getTempoOrdenacao());
+            System.out.printf("\n\n");
+        }
+    }
+
+    
 
     public static void main(String[] args) {
-        int tam = 20;
-        Integer[] vetor = gerarVetorObjetos(tam);
+        geradorBolha();
+        geradorInsertion(); 
+        geradorSelection();
 
-        BubbleSort<Integer> bolha = new BubbleSort<>();
-
-        Integer[] vetorOrdenadoBolha = bolha.ordenar(vetor);
-
-        System.out.println("\nVetor ordenado método Bolha:");
-        System.out.println("Comparações: " + bolha.getComparacoes());
-        System.out.println("Movimentações: " + bolha.getMovimentacoes());
-        System.out.println("Tempo de ordenação (ms): " + bolha.getTempoOrdenacao());
-
-        /* TO DO
-        *Fazer a implementacao do restante do main para a ordenacao 
-        *  com os algoritmos InsertionSort e SelectionSort
-        */
     }
 }

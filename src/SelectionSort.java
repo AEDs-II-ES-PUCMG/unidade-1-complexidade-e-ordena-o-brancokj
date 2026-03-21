@@ -1,12 +1,13 @@
 import java.util.Arrays;
 
-public class InsertionSort<T extends Comparable<T>> implements IOrdenador<T> {
+public class SelectionSort<T extends Comparable<T>> implements IOrdenador<T> {
+
     private long comparacoes;
     private long movimentacoes;
     private double tempoOrdenacao;
     private double inicio;
 
-    private double nanoToMilli = 1.0/1_000_000;
+    private double nanoToMilli = 1.0 / 1_000_000;
 
     @Override
     public long getComparacoes() {
@@ -23,13 +24,13 @@ public class InsertionSort<T extends Comparable<T>> implements IOrdenador<T> {
         return tempoOrdenacao;
     }
 
-    private void iniciar(){
+    private void iniciar() {
         this.comparacoes = 0;
         this.movimentacoes = 0;
         this.inicio = System.nanoTime();
     }
 
-    private void terminar(){
+    private void terminar() {
         this.tempoOrdenacao = (System.nanoTime() - this.inicio) * nanoToMilli;
     }
 
@@ -37,7 +38,7 @@ public class InsertionSort<T extends Comparable<T>> implements IOrdenador<T> {
         T temp = vetor[x];
         vetor[x] = vetor[y];
         vetor[y] = temp;
-        movimentacoes+=3;
+        movimentacoes += 3;
     }
 
     @Override
@@ -45,18 +46,20 @@ public class InsertionSort<T extends Comparable<T>> implements IOrdenador<T> {
         T[] dadosOrdenados = Arrays.copyOf(dados, dados.length);
         int tamanho = dadosOrdenados.length;
         iniciar();
-        for (int i = 1; i < tamanho; i++) {
-            T temp = dadosOrdenados[i];
-            int j = i - 1;
-            while (j >= 0 && dadosOrdenados[j].compareTo(temp) > 0) {
-                dadosOrdenados[j+1] = dadosOrdenados[j];
-                j--;
-                this.comparacoes++;
-                this.movimentacoes++;            
+        for (int i = 1; i < tamanho-1; i++) {
+            int indiceMin = i;
+            for (int j = i+1; j < tamanho; j++) {
+                comparacoes++;
+                if (dadosOrdenados[j].compareTo(dadosOrdenados[indiceMin]) > 0) {
+                    indiceMin = j;
+                }
             }
-            dadosOrdenados[j+1] = temp;
-        }	
-        terminar();
+            T temp = dadosOrdenados[indiceMin];
+            dadosOrdenados[indiceMin] = dadosOrdenados[i];
+            dadosOrdenados[i] = temp;
+            movimentacoes+=3;
+        }
         return dadosOrdenados;
     }
+    
 }
