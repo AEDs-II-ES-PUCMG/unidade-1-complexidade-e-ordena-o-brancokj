@@ -59,6 +59,7 @@ public class SelectionSort<T extends Comparable<T>> implements IOrdenador<T> {
             dadosOrdenados[i] = temp;
             movimentacoes+=3;
         }
+        terminar();
         return dadosOrdenados;
     }
     
