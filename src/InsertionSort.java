@@ -52,9 +52,13 @@ public class InsertionSort<T extends Comparable<T>> implements IOrdenador<T> {
                 dadosOrdenados[j+1] = dadosOrdenados[j];
                 j--;
                 this.comparacoes++;
-                this.movimentacoes++;            
+                this.movimentacoes++;
+            }
+            if (j >= 0) {
+                this.comparacoes++;
             }
             dadosOrdenados[j+1] = temp;
+            this.movimentacoes++;
         }	
         terminar();
         return dadosOrdenados;

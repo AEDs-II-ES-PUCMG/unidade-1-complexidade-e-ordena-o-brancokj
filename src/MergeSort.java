@@ -1,5 +1,3 @@
-import java.util.Arrays;
-
 public class MergeSort<T extends Comparable<T>> implements IOrdenador<T> {
     private long comparacoes;
     private long movimentacoes;
@@ -35,7 +33,9 @@ public class MergeSort<T extends Comparable<T>> implements IOrdenador<T> {
 
     @Override
     public T[] ordenar(T[] dados) {
+        iniciar();
         mergesort(dados, 0, dados.length - 1);
+        terminar();
         return dados;
     }
 
@@ -47,14 +47,12 @@ public class MergeSort<T extends Comparable<T>> implements IOrdenador<T> {
      */
     // 1.a chamada do método mergesort: esq: 0; dir: array.length - 1
     private void mergesort(T[] array, int esq, int dir) {
-        iniciar();
         if (esq < dir) {
             int meio = (esq + dir) / 2;
             mergesort(array, esq, meio);
             mergesort(array, meio + 1, dir);
             intercalar(array, esq, meio, dir);
         }
-        terminar();
     }
 
     /**
@@ -64,51 +62,28 @@ public class MergeSort<T extends Comparable<T>> implements IOrdenador<T> {
      * @param int meio: posição do meio do array a ser ordenado
      * @param int dir: fim do array a ser ordenado
      */
+    @SuppressWarnings("unchecked")
     private void intercalar(T[] array, int esq, int meio, int dir) {
+        int n1 = meio - esq + 1;
+        int n2 = dir - meio;
+        T[] a1 = (T[]) new Comparable[n1];
+        T[] a2 = (T[]) new Comparable[n2];
 
-        int n1, n2, i, j, k;
+        for (int i = 0; i < n1; i++) a1[i] = array[esq + i];
+        for (int j = 0; j < n2; j++) a2[j] = array[meio + 1 + j];
 
-        // Definir tamanho dos dois subarrays
-        n1 = meio - esq + 1;
-        n2 = dir - meio;
-        int[] arrayInt = Arrays.stream(array)
-                .mapToInt(Integer::parseInt)
-                .toArray();
-        int[] a1 = new int[n1];
-        int[] a2 = new int[n2];
-
-        // Object[] objArray = { "1", "2", "3" };
-        // int[] intArray = new int[objArray.length];
-        // for (int i = 0; i < objArray.length; i++) {
-        //     intArray[i] = Integer.parseInt(objArray[i].toString());
-        // }
-
-        // Inicializar primeiro subarray
-        for (i = 0; i < n1; i++) {
-            a1[i] = array[esq + i];
-        }
-
-        // Inicializar segundo subarray
-        for (j = 0; j < n2; j++) {
-            a2[j] = array[meio + j + 1];
-        }
-
-        // Intercalação propriamente dita
-        for (i = j = 0, k = esq; (i < n1 && j < n2); k++) {
-            if (a1[i] <= 0)
-                array[k] = a1[i++];
-            else
-                array[k] = a2[j++];
-        }
-
-        if (i == n1)
-            for (; k <= dir; k++) {
-                array[k] = a2[j++];
+        int i = 0, j = 0, k = esq;
+        while (i < n1 && j < n2) {
+            comparacoes++;
+            if (a1[i].compareTo(a2[j]) <= 0) {
+                array[k++] = a1[i++];
+                movimentacoes++;
+            } else {
+                array[k++] = a2[j++];
+                movimentacoes++;
             }
-        else
-            for (; k <= dir; k++) {
-                array[k] = a1[i++];
-            }
+        }
+        while (i < n1) { array[k++] = a1[i++]; movimentacoes++; }
+        while (j < n2) { array[k++] = a2[j++]; movimentacoes++; }
     }
-
 }
