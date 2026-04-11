@@ -1,66 +1,71 @@
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Comparator;
 
-public class InsertionSort<T extends Comparable<T>> implements IOrdenador<T> {
-    private long comparacoes;
-    private long movimentacoes;
-    private double tempoOrdenacao;
-    private double inicio;
 
-    private double nanoToMilli = 1.0/1_000_000;
+public class InsertionSort<T extends Comparable<T>> implements IOrdenador<T>{
 
-    @Override
-    public long getComparacoes() {
-        return comparacoes;
-    }
+	private long comparacoes;
+	private long movimentacoes;
+	private LocalDateTime inicio;
+	private LocalDateTime termino;	
+	
+	public InsertionSort() {
+		comparacoes = 0;
+		movimentacoes = 0;
+	}
+	
+	@Override
+	public T[] ordenar(T[] dados) {
+		return ordenar(dados, T::compareTo);
+	}
 
-    @Override
-    public long getMovimentacoes() {
-        return movimentacoes;
-    }
-
-    @Override
-    public double getTempoOrdenacao() {
-        return tempoOrdenacao;
-    }
-
-    private void iniciar(){
-        this.comparacoes = 0;
-        this.movimentacoes = 0;
-        this.inicio = System.nanoTime();
-    }
-
-    private void terminar(){
-        this.tempoOrdenacao = (System.nanoTime() - this.inicio) * nanoToMilli;
-    }
-
-    private void swap(int x, int y, T[] vetor) {
-        T temp = vetor[x];
-        vetor[x] = vetor[y];
-        vetor[y] = temp;
-        movimentacoes+=3;
-    }
-
-    @Override
-    public T[] ordenar(T[] dados) {
-        T[] dadosOrdenados = Arrays.copyOf(dados, dados.length);
-        int tamanho = dadosOrdenados.length;
-        iniciar();
-        for (int i = 1; i < tamanho; i++) {
-            T temp = dadosOrdenados[i];
-            int j = i - 1;
-            while (j >= 0 && dadosOrdenados[j].compareTo(temp) > 0) {
-                dadosOrdenados[j+1] = dadosOrdenados[j];
+	@Override
+	public T[] ordenar(T[] dados, Comparator<T> comparador) {
+		T[] dadosOrdenados = Arrays.copyOf(dados, dados.length);
+		int tamanho = dadosOrdenados.length;
+		
+		inicio = LocalDateTime.now();
+		
+		for (int posReferencia = 1; posReferencia <= tamanho -1; posReferencia++) {
+			T valor = dadosOrdenados[posReferencia];
+            int j = posReferencia-1;
+            comparacoes++;
+            while(j >=0 && comparador.compare(valor,dadosOrdenados[j]) <0){
                 j--;
-                this.comparacoes++;
-                this.movimentacoes++;
+                comparacoes++;
             }
-            if (j >= 0) {
-                this.comparacoes++;
-            }
-            dadosOrdenados[j+1] = temp;
-            this.movimentacoes++;
-        }	
-        terminar();
-        return dadosOrdenados;
-    }
+                
+            copiarDados(j+1, posReferencia, dadosOrdenados);
+            dadosOrdenados[j+1] = valor;
+            
+		}	
+		termino = LocalDateTime.now();
+
+		return dadosOrdenados;
+	}
+	
+	private void copiarDados(int inicio, int fim, T[] vet) {
+		for (int i = fim; i > inicio; i--) {
+            movimentacoes++;
+            vet[i] = vet[i-1];
+        }
+	}
+	
+	public long getComparacoes() {
+		return comparacoes;
+	}
+	
+	public long getMovimentacoes() {
+		return movimentacoes;
+	}
+	
+	public double getTempoOrdenacao() {
+	    return  0;
+	}
+
+	
+
+	
 }
