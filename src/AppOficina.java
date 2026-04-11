@@ -140,7 +140,7 @@ public class AppOficina<T extends Comparable<T>> {
             case 2:
                 System.out.println("Qual a descição do produto: ");
                 String desc = teclado.nextLine();
-                for (int i = 0; i < quantProdutos && localizado == null; i++)) {
+                for (int i = 0; i < quantProdutos && localizado == null; i++){
                     if(produtos[i].descricao.equals(desc)){
                         localizado = produtos[i];
                     }
