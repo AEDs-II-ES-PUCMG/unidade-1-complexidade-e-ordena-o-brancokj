@@ -57,7 +57,10 @@ public class SelectionSort<T extends Comparable<T>> implements IOrdenador<T>{
 		return movimentacoes;
 	}
 	
-	public double getTempoOrdenacao() {
-	    return  0;
-	}
+	@Override
+    public double getTempoOrdenacao() {
+        Duration duracao = Duration.between(inicio, termino);
+        double milis = duracao.toNanos() / 1_000_000.0;
+        return milis;
+    }
 }

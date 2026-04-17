@@ -61,11 +61,11 @@ public class InsertionSort<T extends Comparable<T>> implements IOrdenador<T>{
 		return movimentacoes;
 	}
 	
+	@Override
 	public double getTempoOrdenacao() {
-	    return  0;
+		Duration duracao = Duration.between(inicio, termino);
+		double milis = duracao.toNanos() / 1_000_000.0;
+	    return milis;
 	}
-
-	
-
 	
 }
