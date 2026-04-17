@@ -38,6 +38,8 @@ public class AppOficina<T extends Comparable<T>> {
     static int quantProdutos = 0;
     static String nomeArquivoDados = "produtos.txt";
     static IOrdenador<Produto> ordenador;
+    static Produto[] ordenacaoProdutosID;
+    static Produto[] ordenacaoProdutosDesc;
 
     // #region utilidades
     static Scanner teclado;
@@ -129,26 +131,51 @@ public class AppOficina<T extends Comparable<T>> {
         Produto localizado = null;
         switch (opcao) {
             case 1:
-                int numero = lerNumero("Digite o identificador do produto", Integer.class);
-                
-                for (int i = 0; i < quantProdutos && localizado == null; i++) {
-                    if (produtos[i].hashCode() == numero)
-                        localizado = produtos[i];
-                }
+                Integer id = lerNumero("Qual o ID?", Integer.class);
+                if(id != null) localizado = pesquisaBinariaPorId(ordenacaoProdutosID, id);
                 break;
 
             case 2:
-                System.out.println("Qual a descição do produto: ");
+                System.out.println("Qual a desrição?");
                 String desc = teclado.nextLine();
-                for (int i = 0; i < quantProdutos && localizado == null; i++){
-                    if(produtos[i].descricao.equals(desc)){
-                        localizado = produtos[i];
-                    }
-                }
+                localizado = pesquisaBinariaPorDesc(ordenacaoProdutosDesc, desc);
                 break;
         }
 
         return localizado;
+    }
+
+    static Produto pesquisaBinariaPorId(Produto[] vetor, int idAlvo) {
+        int inicio = 0;
+        int fim = quantProdutos - 1;
+        while(inicio <= fim){
+            int meio = (inicio + fim) / 2;
+            if(vetor[meio].hashCode() == idAlvo){
+                return vetor[meio];
+            }else if(vetor[meio].hashCode() < idAlvo){
+                inicio = meio + 1;
+            }else{
+                fim = meio - 1;
+            }
+        }
+        return null;
+    }
+
+    static Produto pesquisaBinariaPorDesc(Produto[] vetor, String descAlvo){
+        int inicio = 0;
+        int fim = quantProdutos - 1;
+        while (inicio <= fim) {
+            int meio = (inicio + fim) / 2;
+            int comparacao = vetor[meio].descricao.compareTo(descAlvo);
+            if(comparacao == 0){
+                return vetor[meio];
+            }else if(comparacao < 0){
+                inicio = meio + 1;
+            }else{
+                fim = meio - 1;
+            }
+        }
+        return null;
     }
 
     private static int exibirMenuLocalizador() {
@@ -187,10 +214,10 @@ public class AppOficina<T extends Comparable<T>> {
         int opcao = exibirMenuOrdenadores();
         Produto[] vetor = carregarProdutos(nomeArquivoDados);
         switch (opcao) {
-            case 1 -> ordenador = new Bubblesort<>();
+            case 1 -> ordenador = new BubbleSort<>();
             case 2 -> ordenador = new InsertionSort<>();
             case 3 -> ordenador = new SelectionSort<>();
-            case 4 -> ordenador = new Mergesort<>();
+            case 4 -> ordenador = new MergeSort<>();
         }
         if (ordenador != null) {
             opcao = exibirMenuComparadores();
@@ -230,6 +257,11 @@ public class AppOficina<T extends Comparable<T>> {
 
         produtos = carregarProdutos(nomeArquivoDados);
         embaralharProdutos();
+        if(produtos != null){
+            ordenacaoProdutosDesc = new Produto[quantProdutos];
+            ordenacaoProdutosID = new Produto[quantProdutos];
+            copiarParaVetores(); 
+        }    
 
         int opcao = -1;
 
@@ -246,5 +278,17 @@ public class AppOficina<T extends Comparable<T>> {
             pausa();
         } while (opcao != 0);
         teclado.close();
+    }
+
+    private static void copiarParaVetores() {
+        for (int i = 0; i < produtos.length; i++) {
+            ordenacaoProdutosDesc[i] = produtos[i];
+            ordenacaoProdutosID[i] = produtos[i];
+        }
+        ComparadorPorCodigo comparadorCodigo = new ComparadorPorCodigo();
+        ComparadorPorDescricao comparadorDesc = new ComparadorPorDescricao();
+        ordenador = new MergeSort<>();
+        ordenador.ordenar(ordenacaoProdutosDesc, comparadorDesc);
+        ordenador.ordenar(ordenacaoProdutosID, comparadorCodigo);
     }
 }
