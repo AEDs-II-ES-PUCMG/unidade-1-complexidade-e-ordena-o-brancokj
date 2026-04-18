@@ -8,6 +8,7 @@ public class SelectionSort<T extends Comparable<T>> implements IOrdenador<T>{
 	private long movimentacoes;
 	private LocalDateTime inicio;
 	private LocalDateTime termino;	
+	private Comparator<T> comparador;
 	
 	public SelectionSort() {
 		comparacoes = 0;
@@ -62,5 +63,10 @@ public class SelectionSort<T extends Comparable<T>> implements IOrdenador<T>{
         Duration duracao = Duration.between(inicio, termino);
         double milis = duracao.toNanos() / 1_000_000.0;
         return milis;
+    }
+
+	@Override
+    public void setComparador(Comparator<T> comparador) {
+        this.comparador = comparador;
     }
 }

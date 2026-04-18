@@ -10,6 +10,7 @@ public class BubbleSort<T extends Comparable<T>> implements IOrdenador<T>{
 	private long movimentacoes;
 	private LocalDateTime inicio;
 	private LocalDateTime termino;	
+	private Comparator<T> comparador;
 	
 	public BubbleSort() {
 		comparacoes = 0;
@@ -25,6 +26,9 @@ public class BubbleSort<T extends Comparable<T>> implements IOrdenador<T>{
 	public T[] ordenar(T[] dados, Comparator<T> comparador) {
 		T[] dadosOrdenados = Arrays.copyOf(dados, dados.length);
 		int tamanho = dadosOrdenados.length;
+		if(this.comparador != null){
+            comparador = this.comparador;
+        }
 		
 		inicio = LocalDateTime.now();
 		
@@ -67,4 +71,11 @@ public class BubbleSort<T extends Comparable<T>> implements IOrdenador<T>{
         double milis = duracao.toNanos() / 1_000_000.0;
         return milis;
     }
+
+	@Override
+	public void setComparador(Comparator<T> comparador) {
+		this.comparador = comparador;
+	}
+
+	
 }

@@ -24,7 +24,9 @@ public class MergeSort<T extends Comparable<T>> implements IOrdenador<T> {
 
     @Override
     public T[] ordenar(T[] dados, Comparator<T> comparador) {
-        this.comparador = comparador;
+        if(this.comparador != null){
+            comparador = this.comparador;
+        }
         int tamanho = dados.length;
         dadosOrdenados = Arrays.copyOf(dados, tamanho);
         inicio = LocalDateTime.now();
@@ -88,6 +90,11 @@ public class MergeSort<T extends Comparable<T>> implements IOrdenador<T> {
         Duration duracao = Duration.between(inicio, termino);
         double milis = duracao.toNanos() / 1_000_000.0;
         return milis;
+    }
+
+    @Override
+    public void setComparador(Comparator<T> comparador) {
+        this.comparador = comparador;
     }
 
 }

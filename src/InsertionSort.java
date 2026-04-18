@@ -10,6 +10,7 @@ public class InsertionSort<T extends Comparable<T>> implements IOrdenador<T>{
 	private long movimentacoes;
 	private LocalDateTime inicio;
 	private LocalDateTime termino;	
+	private Comparator<T> comparador;
 	
 	public InsertionSort() {
 		comparacoes = 0;
@@ -25,6 +26,9 @@ public class InsertionSort<T extends Comparable<T>> implements IOrdenador<T>{
 	public T[] ordenar(T[] dados, Comparator<T> comparador) {
 		T[] dadosOrdenados = Arrays.copyOf(dados, dados.length);
 		int tamanho = dadosOrdenados.length;
+		if(this.comparador != null){
+            comparador = this.comparador;
+        }
 		
 		inicio = LocalDateTime.now();
 		
@@ -32,7 +36,7 @@ public class InsertionSort<T extends Comparable<T>> implements IOrdenador<T>{
 			T valor = dadosOrdenados[posReferencia];
             int j = posReferencia-1;
             comparacoes++;
-            while(j >=0 && comparador.compare(valor,dadosOrdenados[j]) <0){
+            while(j >=0 && comparador.compare(valor,dadosOrdenados[j]) < 0){
                 j--;
                 comparacoes++;
             }
@@ -67,5 +71,10 @@ public class InsertionSort<T extends Comparable<T>> implements IOrdenador<T>{
 		double milis = duracao.toNanos() / 1_000_000.0;
 	    return milis;
 	}
+
+	@Override
+    public void setComparador(Comparator<T> comparador) {
+        this.comparador = comparador;
+    }
 	
 }

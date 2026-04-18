@@ -9,6 +9,7 @@ public class HeapSort<T extends Comparable<T>> implements IOrdenador<T> {
     private long movimentacoes;
     private LocalDateTime inicio;
     private LocalDateTime termino;
+    private Comparator<T> comparador;
 
     public HeapSort() {
         comparacoes = 0;
@@ -25,6 +26,9 @@ public class HeapSort<T extends Comparable<T>> implements IOrdenador<T> {
         T[] dadosOrdenados = Arrays.copyOf(dados, dados.length);
         int n = dadosOrdenados.length;
         inicio = LocalDateTime.now();
+        if(this.comparador != null){
+            comparador = this.comparador;
+        }
 
         // Build heap
         for (int i = n / 2 - 1; i >= 0; i--) {
@@ -76,5 +80,10 @@ public class HeapSort<T extends Comparable<T>> implements IOrdenador<T> {
     public double getTempoOrdenacao() {
         Duration duracao = Duration.between(inicio, termino);
         return duracao.toNanos() / 1_000_000.0;
+    }
+
+    @Override
+    public void setComparador(Comparator<T> comparador) {
+        this.comparador = comparador;
     }
 }

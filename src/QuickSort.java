@@ -9,6 +9,7 @@ public class QuickSort<T extends Comparable<T>> implements IOrdenador<T> {
     private long movimentacoes;
     private LocalDateTime inicio;
     private LocalDateTime termino;
+    private Comparator<T> comparador;
 
     public QuickSort() {
         comparacoes = 0;
@@ -24,6 +25,9 @@ public class QuickSort<T extends Comparable<T>> implements IOrdenador<T> {
     public T[] ordenar(T[] dados, Comparator<T> comparador) {
         T[] dadosOrdenados = Arrays.copyOf(dados, dados.length);
         inicio = LocalDateTime.now();
+        if(this.comparador != null){
+            comparador = this.comparador;
+        }
         
         executarQuickSort(dadosOrdenados, 0, dadosOrdenados.length - 1, comparador);
         
@@ -69,5 +73,10 @@ public class QuickSort<T extends Comparable<T>> implements IOrdenador<T> {
     public double getTempoOrdenacao() {
         Duration duracao = Duration.between(inicio, termino);
         return duracao.toNanos() / 1_000_000.0;
+    }
+
+    @Override
+    public void setComparador(Comparator<T> comparador) {
+        this.comparador = comparador;
     }
 }
